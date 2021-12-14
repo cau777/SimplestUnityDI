@@ -34,6 +34,24 @@ namespace SimplestUnityDI.Dependencies
             return this;
         }
 
+        public DependencyBuilder<TContract, TConcrete> FromGameObject([NotNull] string name)
+        {
+            _provider = new GameObjectProvider(name, typeof(TConcrete));
+            return this;
+        }
+
+        public DependencyBuilder<TContract, TConcrete> FromResource([NotNull] string path)
+        {
+            _provider = new ResourceProvider(path);
+            return this;
+        }
+
+        public DependencyBuilder<TContract, TConcrete> FromFunction([NotNull] Func<DiContainer, TConcrete> function)
+        {
+            _provider = new FunctionProvider<TConcrete>(function);
+            return this;
+        }
+
         public DependencyBuilder<TContract, TConcrete> WithId([NotNull] string id)
         {
             _id = id;
@@ -42,15 +60,9 @@ namespace SimplestUnityDI.Dependencies
 
         public void AsTransient()
         {
-            Validate();
             if (_provider is null) FromConstructor();
             Dependency dependency = new TransientDependency(_provider, typeof(TContract), _id);
             _finished(dependency);
-        }
-
-        private void Validate()
-        {
-            
         }
     }
 }

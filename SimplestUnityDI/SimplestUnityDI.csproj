@@ -47,8 +47,11 @@
         <Compile Include="Dependencies\Dependency.cs" />
         <Compile Include="Dependencies\DependencyBuilder.cs" />
         <Compile Include="Dependencies\Providers\ConstructorProvider.cs" />
+        <Compile Include="Dependencies\Providers\FunctionProvider.cs" />
+        <Compile Include="Dependencies\Providers\GameObjectProvider.cs" />
         <Compile Include="Dependencies\Providers\InstanceProvider.cs" />
         <Compile Include="Dependencies\Providers\IProvider.cs" />
+        <Compile Include="Dependencies\Providers\ResourceProvider.cs" />
         <Compile Include="Dependencies\TransientDependency.cs" />
         <Compile Include="DiContainer.cs" />
         <Compile Include="DiMonoBehaviour.cs" />
