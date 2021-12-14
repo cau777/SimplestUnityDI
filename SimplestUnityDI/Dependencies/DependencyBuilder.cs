@@ -2,24 +2,29 @@
 using JetBrains.Annotations;
 using SimplestUnityDI.Dependencies.Providers;
 using SimplestUnityDI.Exceptions;
+using UnityEngine.SceneManagement;
 
 namespace SimplestUnityDI.Dependencies
 {
     public class DependencyBuilder<TContract, TConcrete>
     {
+        public IProvider Provider { get; set; }
+        public string ID { get; set; }
+        public bool PreventDisposal { get; set; }
+
         private readonly Action<Dependency> _finished;
-        private IProvider _provider;
-        private string _id;
-        
-        public DependencyBuilder(Action<Dependency> finished)
+        private readonly Action<Dependency> _addToDisposal;
+
+        public DependencyBuilder(Action<Dependency> finished, Action<Dependency> addToDisposal)
         {
             _finished = finished;
-            _id = "";
+            _addToDisposal = addToDisposal;
+            ID = "";
         }
-        
+
         public DependencyBuilder<TContract, TConcrete> FromInstance([NotNull] TConcrete instance)
-        { 
-            _provider = new InstanceProvider(instance);
+        {
+            Provider = new InstanceProvider(instance);
             return this;
         }
 
@@ -30,38 +35,57 @@ namespace SimplestUnityDI.Dependencies
             if (concreteType.IsAbstract)
                 throw new ContainerException($"The type {concreteType} must not be abstract");
 
-            _provider = new ConstructorProvider(concreteType);
+            Provider = new ConstructorProvider(concreteType);
             return this;
         }
 
         public DependencyBuilder<TContract, TConcrete> FromGameObject([NotNull] string name)
         {
-            _provider = new GameObjectProvider(name, typeof(TConcrete));
+            Provider = new GameObjectProvider(name, typeof(TConcrete));
             return this;
         }
 
         public DependencyBuilder<TContract, TConcrete> FromResource([NotNull] string path)
         {
-            _provider = new ResourceProvider(path);
+            Provider = new ResourceProvider(path);
             return this;
         }
 
         public DependencyBuilder<TContract, TConcrete> FromFunction([NotNull] Func<DiContainer, TConcrete> function)
         {
-            _provider = new FunctionProvider<TConcrete>(function);
+            Provider = new FunctionProvider<TConcrete>(function);
             return this;
         }
 
         public DependencyBuilder<TContract, TConcrete> WithId([NotNull] string id)
         {
-            _id = id;
+            ID = id.ToLower();
+            return this;
+        }
+
+        public DependencyBuilder<TContract, TConcrete> Permanent()
+        {
+            PreventDisposal = true;
             return this;
         }
 
         public void AsTransient()
         {
-            if (_provider is null) FromConstructor();
-            Dependency dependency = new TransientDependency(_provider, typeof(TContract), _id);
+            if (Provider is null) FromConstructor();
+            Dependency dependency = new TransientDependency(Provider, typeof(TContract), ID);
+            Finish(dependency);
+        }
+
+        public void AsSingleton()
+        {
+            if (Provider is null) FromConstructor();
+            Dependency dependency = new SingletonDependency(Provider, typeof(TContract), ID);
+            Finish(dependency);
+        }
+
+        private void Finish(Dependency dependency)
+        {
+            if (!PreventDisposal) _addToDisposal(dependency);
             _finished(dependency);
         }
     }

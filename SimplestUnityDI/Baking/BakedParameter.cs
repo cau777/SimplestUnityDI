@@ -23,7 +23,7 @@ namespace SimplestUnityDI.Baking
             {
                 ParameterInfo info = parameters[i];
 
-                result[i] = new BakedParameter(info.ParameterType, info.Name);
+                result[i] = new BakedParameter(info.ParameterType, info.Name.ToLower());
             }
 
             return result;

@@ -52,11 +52,13 @@
         <Compile Include="Dependencies\Providers\InstanceProvider.cs" />
         <Compile Include="Dependencies\Providers\IProvider.cs" />
         <Compile Include="Dependencies\Providers\ResourceProvider.cs" />
+        <Compile Include="Dependencies\SingletonDependency.cs" />
         <Compile Include="Dependencies\TransientDependency.cs" />
         <Compile Include="DiContainer.cs" />
         <Compile Include="DiMonoBehaviour.cs" />
         <Compile Include="DiSetup.cs" />
         <Compile Include="Exceptions\ContainerException.cs" />
+        <Compile Include="IDisposingEvent.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
