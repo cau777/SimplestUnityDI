@@ -14,12 +14,23 @@ namespace SimplestUnityDI.Dependencies
         public DependencyBuilder(Action<Dependency> finished)
         {
             _finished = finished;
-            _provider = new ConstructorProvider();
+            _id = "";
         }
         
         public DependencyBuilder<TContract, TConcrete> FromInstance([NotNull] TConcrete instance)
         { 
             _provider = new InstanceProvider(instance);
+            return this;
+        }
+
+        public DependencyBuilder<TContract, TConcrete> FromConstructor()
+        {
+            Type concreteType = typeof(TConcrete);
+
+            if (concreteType.IsAbstract)
+                throw new ContainerException($"The type {concreteType} must not be abstract");
+
+            _provider = new ConstructorProvider(concreteType);
             return this;
         }
 
@@ -32,6 +43,7 @@ namespace SimplestUnityDI.Dependencies
         public void AsTransient()
         {
             Validate();
+            if (_provider is null) FromConstructor();
             Dependency dependency = new TransientDependency(_provider, typeof(TContract), _id);
             _finished(dependency);
         }

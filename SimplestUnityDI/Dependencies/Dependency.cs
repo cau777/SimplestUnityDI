@@ -14,7 +14,7 @@ namespace SimplestUnityDI.Dependencies
         [NotNull]
         public Type ContractType { get; }
 
-        [CanBeNull]
+        [NotNull]
         public string Id { get; }
 
         [NotNull] 
@@ -22,7 +22,7 @@ namespace SimplestUnityDI.Dependencies
 
         public abstract object GetInstance(DiContainer container);
 
-        protected Dependency([NotNull] IProvider provider, [NotNull] Type contractType, [CanBeNull] string id)
+        protected Dependency([NotNull] IProvider provider, [NotNull] Type contractType, [NotNull] string id)
         {
             Provider = provider;
             ContractType = contractType;

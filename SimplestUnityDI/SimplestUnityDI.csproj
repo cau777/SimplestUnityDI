@@ -40,6 +40,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Baking\BakedConstructor.cs" />
+        <Compile Include="Baking\BakedMethod.cs" />
+        <Compile Include="Baking\BakedParameter.cs" />
+        <Compile Include="Baking\BakingUtils.cs" />
         <Compile Include="Dependencies\Dependency.cs" />
         <Compile Include="Dependencies\DependencyBuilder.cs" />
         <Compile Include="Dependencies\Providers\ConstructorProvider.cs" />
