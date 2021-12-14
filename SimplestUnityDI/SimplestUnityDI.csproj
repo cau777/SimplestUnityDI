@@ -40,6 +40,15 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Dependencies\Dependency.cs" />
+        <Compile Include="Dependencies\DependencyBuilder.cs" />
+        <Compile Include="Dependencies\Providers\ConstructorProvider.cs" />
+        <Compile Include="Dependencies\Providers\InstanceProvider.cs" />
+        <Compile Include="Dependencies\Providers\IProvider.cs" />
+        <Compile Include="Dependencies\TransientDependency.cs" />
+        <Compile Include="DiContainer.cs" />
+        <Compile Include="DiMonoBehaviour.cs" />
+        <Compile Include="DiSetup.cs" />
         <Compile Include="Exceptions\ContainerException.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
