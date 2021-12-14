@@ -8,18 +8,21 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+      
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
+      
+    - name: Restore Packages
+      run: nuget restore SimplestUnityDI.sln
+
+    - name: Build Solution
+      run: |
+        msbuild.exe SimplestUnityDI.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+        
