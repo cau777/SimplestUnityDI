@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SimplestUnityDI
 {
+    /// <summary>
+    /// Inherit this class and declare a method named "Setup" to receive dependencies as parameters of the method
+    /// </summary>
     public abstract class DiMonoBehaviour : MonoBehaviour
     {
         private static readonly IDictionary<Type, BakedMethod> BakedSetups = new Dictionary<Type, BakedMethod>();

@@ -2,6 +2,10 @@
 
 namespace SimplestUnityDI.Dependencies.Providers
 {
+    /// <summary>
+    /// Calls a function to receive a object
+    /// </summary>
+    /// <typeparam name="TConcrete"></typeparam>
     public class FunctionProvider<TConcrete> : IProvider
     {
         private readonly Func<DiContainer, TConcrete> _function;

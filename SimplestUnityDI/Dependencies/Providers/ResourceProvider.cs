@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace SimplestUnityDI.Dependencies.Providers
 {
+    /// <summary>
+    /// Uses Unity's Resources.Load to get an object from the Resources folder
+    /// </summary>
     public class ResourceProvider : IProvider
     {
         private readonly string _path;

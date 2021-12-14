@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using SimplestUnityDI.Dependencies.Providers;
 using SimplestUnityDI.Exceptions;
-using UnityEngine.SceneManagement;
 
 namespace SimplestUnityDI.Dependencies
 {
@@ -28,7 +27,7 @@ namespace SimplestUnityDI.Dependencies
             return this;
         }
 
-        public DependencyBuilder<TContract, TConcrete> FromConstructor()
+        private void FromConstructor()
         {
             Type concreteType = typeof(TConcrete);
 
@@ -36,39 +35,66 @@ namespace SimplestUnityDI.Dependencies
                 throw new ContainerException($"The type {concreteType} must not be abstract");
 
             Provider = new ConstructorProvider(concreteType);
-            return this;
         }
 
+        /// <summary>
+        /// Gets a component of the GameObject with the specified name
+        /// </summary>
+        /// <param name="name">The name of the GameObject</param>
+        /// <returns>The builder to continue building</returns>
         public DependencyBuilder<TContract, TConcrete> FromGameObject([NotNull] string name)
         {
             Provider = new GameObjectProvider(name, typeof(TConcrete));
             return this;
         }
 
+        /// <summary>
+        /// Uses Unity's Resources.Load to get an object from the Resources folder
+        /// </summary>
+        /// <param name="path">The path to the file without extension and omitting "Resources/". Example: "My Prefab" for file "Resources/My Prefab.prefab"</param>
+        /// <returns>The builder to continue building</returns>
         public DependencyBuilder<TContract, TConcrete> FromResource([NotNull] string path)
         {
             Provider = new ResourceProvider(path);
             return this;
         }
 
+        /// <summary>
+        /// Calls a function to receive a object
+        /// </summary>
+        /// <param name="function">The function that provides the object. It should never return null</param>
+        /// <returns>The builder to continue building</returns>
         public DependencyBuilder<TContract, TConcrete> FromFunction([NotNull] Func<DiContainer, TConcrete> function)
         {
             Provider = new FunctionProvider<TConcrete>(function);
             return this;
         }
 
+        /// <summary>
+        /// Adds an Id to the dependency. In case 2 dependencies are registered with the same Contract type,
+        /// the container chooses the one that has the Id equals to the name of the parameter. Case Insensitive. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The builder to continue building</returns>
         public DependencyBuilder<TContract, TConcrete> WithId([NotNull] string id)
         {
             ID = id.ToLower();
             return this;
         }
 
+        /// <summary>
+        /// Specifies that a dependency should not be deleted after changing scenes
+        /// </summary>
+        /// <returns>The builder to continue building</returns>
         public DependencyBuilder<TContract, TConcrete> Permanent()
         {
             PreventDisposal = true;
             return this;
         }
 
+        /// <summary>
+        /// Represents a dependency that always evaluate it's provider
+        /// </summary>
         public void AsTransient()
         {
             if (Provider is null) FromConstructor();
@@ -76,6 +102,9 @@ namespace SimplestUnityDI.Dependencies
             Finish(dependency);
         }
 
+        /// <summary>
+        /// Represents a dependency that evaluates it's provider only once
+        /// </summary>
         public void AsSingleton()
         {
             if (Provider is null) FromConstructor();

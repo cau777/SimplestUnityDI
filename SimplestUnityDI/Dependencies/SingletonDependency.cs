@@ -4,6 +4,9 @@ using SimplestUnityDI.Dependencies.Providers;
 
 namespace SimplestUnityDI.Dependencies
 {
+    /// <summary>
+    /// Represents a dependency that evaluates it's provider only once
+    /// </summary>
     public class SingletonDependency : Dependency
     {
         private object _instance;

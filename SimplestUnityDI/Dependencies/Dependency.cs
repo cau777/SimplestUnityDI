@@ -4,12 +4,7 @@ using SimplestUnityDI.Dependencies.Providers;
 
 namespace SimplestUnityDI.Dependencies
 {
-    public interface IDependency
-    {
-        object GetInstance(DiContainer container);
-    }
-
-    public abstract class Dependency : IDependency, IEquatable<Dependency>
+    public abstract class Dependency : IEquatable<Dependency>
     {
         [NotNull]
         public Type ContractType { get; }

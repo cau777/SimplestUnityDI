@@ -1,5 +1,8 @@
 ﻿namespace SimplestUnityDI.Dependencies.Providers
 {
+    /// <summary>
+    /// Returns an instance
+    /// </summary>
     public class InstanceProvider : IProvider
     {
         private readonly object _instance;

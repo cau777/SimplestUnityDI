@@ -5,6 +5,9 @@ using SimplestUnityDI.Exceptions;
 
 namespace SimplestUnityDI.Dependencies.Providers
 {
+    /// <summary>
+    /// Instantiates a class 
+    /// </summary>
     public class ConstructorProvider : IProvider
     {
         private readonly BakedConstructor _baked;

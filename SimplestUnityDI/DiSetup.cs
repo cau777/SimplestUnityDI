@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using SimplestUnityDI.Dependencies;
 using UnityEngine;
 
 namespace SimplestUnityDI
 {
-    [DefaultExecutionOrder(-1)] // Executes before most of the scripts
+    /// <summary>
+    /// Inherit this class to add dependencies to the container. It automatically executes before other scripts
+    /// </summary>
+    [DefaultExecutionOrder(-1)]
     public abstract class DiSetup : MonoBehaviour, IDisposingEvent
     {
         public event Action Disposing;
@@ -15,6 +16,7 @@ namespace SimplestUnityDI
         {
             DiContainer container = DiContainer.Instance;
             container.CurrentDisposingEvent = this;
+            container.Register<DiContainer>().FromInstance(container).AsSingleton();
             SetupDependencies(container);
             AfterSetup(container);
         }
@@ -24,6 +26,10 @@ namespace SimplestUnityDI
             Disposing?.Invoke();
         }
 
+        /// <summary>
+        /// Will be called after setting up the Dependency Injection container 
+        /// </summary>
+        /// <param name="diContainer"></param>
         protected virtual void AfterSetup(DiContainer diContainer)
         {
             

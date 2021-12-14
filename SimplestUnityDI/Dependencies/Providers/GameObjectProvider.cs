@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace SimplestUnityDI.Dependencies.Providers
 {
+    /// <summary>
+    /// Gets a component of the GameObject with the specified name
+    /// </summary>
     public class GameObjectProvider : IProvider
     {
         private readonly string _name;
